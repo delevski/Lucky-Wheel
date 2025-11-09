@@ -1,0 +1,5 @@
+{
+  "name": "Interactive Spinning Wheel",
+  "description": "A sleek, interactive spinning wheel application where the outcome can be pre-determined or random. Features smooth animations and optional sound effects.",
+  "requestFramePermissions": []
+}
