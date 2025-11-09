@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useRef, useEffect } from 'react';
 import SpinningWheel from './components/SpinningWheel';
 import { PrizeSelector } from './components/PrizeSelector';
 import type { Prize } from './types';
@@ -19,6 +20,14 @@ const App: React.FC = () => {
   const [selectedOutcome, setSelectedOutcome] = useState<Prize | null>(null);
   const [lastResult, setLastResult] = useState<Prize | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
+  const wheelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Scroll to the wheel when an outcome is selected on mobile/tablet view
+    if (selectedOutcome && window.innerWidth < 1024) { // Tailwind's lg breakpoint
+      wheelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [selectedOutcome]);
 
   const handleSpinStart = () => {
     setIsSpinning(true);
@@ -41,12 +50,12 @@ const App: React.FC = () => {
           גלגל המזל של רמי השועל
         </h1>
         <p className="mt-3 text-lg text-gray-400 max-w-2xl mx-auto" dir="rtl">
-          סובב את הגלגל כדי לזכות בפרס, או קבע את התוצאה מראש בעזרת הפקדים בצד.
+          סובב את הגלגל כדי לזכות בפרס, או קבע את התוצאה מראש בעזרת הפקדים.
         </p>
       </header>
 
-      <div className="w-full flex flex-col md:flex-row items-center justify-center md:justify-around gap-8 md:gap-16">
-        <div className="order-2 md:order-1">
+      <div className="w-full flex flex-col lg:flex-row items-center justify-center lg:justify-around gap-12 lg:gap-16">
+        <div className="w-full max-w-md lg:max-w-none">
           <PrizeSelector
             prizes={prizes}
             selectedPrize={selectedOutcome}
@@ -55,7 +64,7 @@ const App: React.FC = () => {
           />
         </div>
 
-        <div className="order-1 md:order-2 flex flex-col items-center gap-6">
+        <div ref={wheelRef} className="flex flex-col items-center gap-6">
           <SpinningWheel
             prizes={prizes}
             onSpinStart={handleSpinStart}
@@ -75,8 +84,6 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* FIX: The `jsx` prop is not a valid attribute for the standard <style> element in React. 
-          This syntax is for `styled-jsx`, which is not being used here. Removing it corrects the error. */}
       <style>{`
         @keyframes fade-in-up {
           0% {
