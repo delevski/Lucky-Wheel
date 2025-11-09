@@ -46,25 +46,18 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-4 overflow-hidden">
       <header className="text-center mb-6 md:mb-8">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-600" dir="rtl">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-600">
           גלגל המזל של רמי השועל
         </h1>
-        <p className="mt-3 text-lg text-gray-400 max-w-2xl mx-auto" dir="rtl">
+        <p className="mt-3 text-lg text-gray-400 max-w-2xl mx-auto">
           סובב את הגלגל כדי לזכות בפרס, או קבע את התוצאה מראש בעזרת הפקדים.
         </p>
       </header>
 
-      <div className="w-full flex flex-col lg:flex-row items-center justify-center lg:justify-around gap-12 lg:gap-16">
-        <div className="w-full max-w-md lg:max-w-none">
-          <PrizeSelector
-            prizes={prizes}
-            selectedPrize={selectedOutcome}
-            onSelectPrize={handleSelectPrize}
-            isSpinning={isSpinning}
-          />
-        </div>
-
-        <div ref={wheelRef} className="flex flex-col items-center gap-6">
+      <div className="w-full flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-around gap-12 lg:gap-16">
+        
+        {/* On mobile, wheel is second (order-2). On desktop, it's first (lg:order-1). For RTL desktop, this will be on the right. */}
+        <div ref={wheelRef} className="flex flex-col items-center gap-6 order-2 lg:order-1">
           <SpinningWheel
             prizes={prizes}
             onSpinStart={handleSpinStart}
@@ -77,11 +70,22 @@ const App: React.FC = () => {
               className="mt-4 p-4 rounded-xl text-center transition-all duration-300 animate-fade-in-up"
               style={{ backgroundColor: lastResult.color, boxShadow: `0 0 20px ${lastResult.color}` }}
              >
-               <span className="text-sm text-white/80" dir="rtl">התוצאה האחרונה:</span>
+               <span className="text-sm text-white/80">התוצאה האחרונה:</span>
                <p className="text-2xl font-bold text-white" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.5)'}}>{lastResult.name}</p>
              </div>
           )}
         </div>
+        
+        {/* On mobile, selector is first (order-1). On desktop, it's second (lg:order-2). For RTL desktop, this will be on the left. */}
+        <div className="w-full max-w-md lg:max-w-none order-1 lg:order-2">
+          <PrizeSelector
+            prizes={prizes}
+            selectedPrize={selectedOutcome}
+            onSelectPrize={handleSelectPrize}
+            isSpinning={isSpinning}
+          />
+        </div>
+
       </div>
 
       <style>{`
